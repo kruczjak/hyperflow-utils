@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hyperflow
+  namespace: hyperflow
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hyperflow
+  template:
+    metadata:
+      labels:
+        app: hyperflow
+    spec:
+      containers:
+      - name: hyperflow
+        image: quay.io/kruczjak/hyperflow
+        env:
+        - name: AMQP_URL
+          valueFrom:
+            secretKeyRef:
+              name: hyperflow-amqp
+              key: AMQP_URL
