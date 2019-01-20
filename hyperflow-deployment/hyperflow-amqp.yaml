@@ -16,6 +16,10 @@ spec:
       containers:
       - name: hyperflow-amqp
         image: quay.io/kruczjak/hyperflow-amqp-executor
+        command:
+        - hyperflow-amqp-executor
+        - example/settings.yml
+        imagePullPolicy: Always
         env:
         - name: AMQP_URL
           valueFrom:
@@ -32,6 +36,50 @@ spec:
             secretKeyRef:
               name: hyperflow-amqp
               key: AWS_SECRET_ACCESS_KEY
+        - name: STORAGE
+          value: 'cloud'
         - name: AWS_REGION
-          value: 'us-east-2'
-    
+          value: 'us-east-1'
+        - name: S3_BUCKET
+          value: 'hyperflow-virginia'
+        - name: S3_PATH
+          value: '0.25/input/'
+        - name: REDIS_URL
+          value: 'redis://redis-master.redis.svc.cluster.local:6379/0'
+---
+kind: HorizontalPodAutoscaler
+apiVersion: autoscaling/v2beta1
+metadata:
+  name: hyperflow-amqp
+  namespace: hyperflow
+spec:
+  scaleTargetRef:
+    # point the HPA at the sample application
+    # you created above
+    apiVersion: apps/v1
+    kind: Deployment
+    name: hyperflow-amqp
+  # autoscale between 1 and 10 replicas
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+  - type: Object
+    object:
+      metricName: rabbitmq_queue_messages
+      targetValue: 3
+      target:
+        apiVersion: v1
+        kind: Service
+        name: rabbitmq
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: rabbitmq
+  namespace: hyperflow
+spec:
+  ports:
+  - port: 80
+    targetPort: 80
+    protocol: TCP
+

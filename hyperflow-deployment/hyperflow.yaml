@@ -16,6 +16,7 @@ spec:
       containers:
       - name: hyperflow
         image: quay.io/kruczjak/hyperflow
+        imagePullPolicy: Always
         command:
         - node
         - ./bin/hflow
@@ -28,3 +29,27 @@ spec:
               key: AMQP_URL
         - name: REDIS_URL
           value: 'redis://redis-master.redis.svc.cluster.local:6379/0'
+        - name: S3_BUCKET
+          value: 'hyperflow-virginia'
+        - name: S3_PATH
+          value: '0.25/input/'
+        - name: AWS_REGION
+          value: 'us-east-1'
+        - name: STORAGE
+          value: 'cloud'
+        ports:
+        - containerPort: 80
+          protocol: TCP
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: hyperflow
+  namespace: hyperflow
+spec:
+  selector:
+    app: hyperflow
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80

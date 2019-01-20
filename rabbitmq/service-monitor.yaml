@@ -18,3 +18,7 @@ spec:
     - targetPort: 9090
       path: /metrics
       interval: 15s
+      relabelings:
+        - sourceLabels:
+            - __meta_kubernetes_service_label_hyperflow_namespace
+          targetLabel: hyperflowNamespace
