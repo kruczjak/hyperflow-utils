@@ -207,7 +207,7 @@ readinessProbe:
   successThreshold: 1
 
 metrics:
-  enabled: false
+  enabled: true
   image:
     registry: docker.io
     repository: kbudde/rabbitmq-exporter
