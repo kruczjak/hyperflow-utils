@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: hyperflow-amqp
-  namespace: hyperflow-amqp
+  namespace: hyperflow
 spec:
   replicas: 1
   selector:
@@ -16,22 +16,22 @@ spec:
       containers:
       - name: hyperflow-amqp
         image: quay.io/kruczjak/hyperflow-amqp-executor
-      env:
-      - name: AMQP_URL
-        valueFrom:
-          secretKeyRef:
-            name: hyperflow-amqp
-            key: AMQP_URL
-      - name: AWS_ACCESS_KEY_ID
-        valueFrom:
-          secretKeyRef:
-            name: hyperflow-amqp
-            key: AWS_ACCESS_KEY_ID
-      - name: AWS_SECRET_ACCESS_KEY
-        valueFrom:
-          secretKeyRef:
-            name: hyperflow-amqp
-            key: AWS_SECRET_ACCESS_KEY
-      - name: AWS_REGION
-        value: 'us-east-2'
-  
+        env:
+        - name: AMQP_URL
+          valueFrom:
+            secretKeyRef:
+              name: hyperflow-amqp
+              key: AMQP_URL
+        - name: AWS_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              name: hyperflow-amqp
+              key: AWS_ACCESS_KEY_ID
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: hyperflow-amqp
+              key: AWS_SECRET_ACCESS_KEY
+        - name: AWS_REGION
+          value: 'us-east-2'
+    
