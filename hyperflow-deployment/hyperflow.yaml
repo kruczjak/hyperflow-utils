@@ -22,3 +22,5 @@ spec:
             secretKeyRef:
               name: hyperflow-amqp
               key: AMQP_URL
+        - name: REDIS_URL
+          value: 'redis://redis-master.redis.svc.cluster.local:6379'
