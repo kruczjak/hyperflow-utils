@@ -3,7 +3,7 @@ kind: ServiceMonitor
 metadata:
   labels:
     app: rabbitmq
-    prometheus: kube-prometheus
+    release: prometheus-operator
   name: rabbitmq
   namespace: monitoring
 spec:
