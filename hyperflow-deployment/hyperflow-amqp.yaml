@@ -13,6 +13,16 @@ spec:
       labels:
         app: hyperflow-amqp
     spec:
+      # affinity:
+      #   podAntiAffinity:
+      #       :
+      #     - labelSelector:
+      #         matchExpressions:
+      #         - key: app
+      #           operator: In
+      #           values:
+      #           - hyperflow-amqp
+      #       topologyKey: "kubernetes.io/hostname"
       containers:
       - name: hyperflow-amqp
         image: quay.io/kruczjak/hyperflow-amqp-executor
@@ -20,6 +30,13 @@ spec:
         - hyperflow-amqp-executor
         - example/settings.yml
         imagePullPolicy: Always
+        # resources:
+        #   requests:
+        #     cpu: 1
+        #     memory: 1g
+        #   limits:
+        #     cpu: 4
+        #     memory: 10g
         env:
         - name: AMQP_URL
           valueFrom:
